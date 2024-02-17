@@ -36,4 +36,4 @@ jobs:
     # This combines build and test steps to avoid running the container multiple times.
     - name: Cargo Build and Test
       run: |
-        docker run --rm -v ${{ github.workspace }}:/usr/src/vh ${{ env.DOCKER_IMAGE_NAME }}:latest /bin/bash -c "cargo build --verbose && cargo test --verbose"
+        docker run --rm -v ${{ github.workspace }}:/workspaces/visual-hash ${{ env.DOCKER_IMAGE_NAME }}:latest /bin/bash -c "cargo build --verbose && cargo test --verbose"
