@@ -14,3 +14,5 @@ RUN rustup component add rustfmt
 RUN mkdir -p /workspaces/visual-hash
 WORKDIR /workspaces/visual-hash
 
+ENV RUST_LOG=info
+
