@@ -1,4 +1,4 @@
-name: Rust
+name: Rust Visual Hashing CI
 
 on:
   push:
@@ -8,27 +8,32 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  DOCKER_IMAGE_NAME: visual_hashing
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: ubuntu-20.04 # Use a specific version for reproducibility
 
     steps:
     - uses: actions/checkout@v3
 
-    # Build the Docker image from the Dockerfile in .devcontainer
+    # Setup Docker Builder
+    # Leveraging Docker's cache from previous steps could be complex and might require specific setup for your CI system.
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    # Build Docker Image
+    # Consider caching the cargo dependencies to improve build times. This step doesn't include caching but focuses on building the image.
     - name: Build Docker Image
       uses: docker/build-push-action@v3
       with:
         context: ./.devcontainer
         file: ./.devcontainer/Dockerfile
         load: true
-        tags: rust_project:latest
+        tags: ${{ env.DOCKER_IMAGE_NAME }}:latest
 
-    # Run cargo build inside the Docker container
-    - name: Cargo Build
-      run: docker run --rm -v ${{ github.workspace }}:/usr/src/vh rust_project:latest cargo build --verbose
-
-    # Run cargo test inside the Docker container
-    - name: Cargo Test
-      run: docker run --rm -v ${{ github.workspace }}:/usr/src/vh rust_project:latest cargo test --verbose
+    # Run cargo build and test inside the Docker container
+    # This combines build and test steps to avoid running the container multiple times.
+    - name: Cargo Build and Test
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/usr/src/vh ${{ env.DOCKER_IMAGE_NAME }}:latest /bin/bash -c "cargo build --verbose && cargo test --verbose"

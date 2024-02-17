@@ -11,5 +11,6 @@ RUN rustup component add clippy
 RUN rustup component add rustfmt
 
 # Set the working directory in the container
-WORKDIR /usr/src/vh
+RUN mkdir -p /workspaces/visual-hash
+WORKDIR /workspaces/visual-hash
 
