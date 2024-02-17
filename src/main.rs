@@ -1,5 +1,6 @@
 mod cli;
 mod hashing;
+mod image_generation;
 use log::{error, info};
 
 fn main() {
@@ -23,6 +24,9 @@ fn main() {
             std::process::exit(1); // Exit with a non-zero status code to indicate an error
         }
     };
+
+    let image = image_generation::generate_image_with_seed(&hash);
+    image.save("output.png").unwrap();
 
     info!("SHA-256 hash: {}", hash);
 }
