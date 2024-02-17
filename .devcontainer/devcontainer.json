@@ -1,0 +1,18 @@
+{
+    "name": "Visual Hashing",
+    "build": {
+        "context": ".",
+        "dockerfile": "Dockerfile"
+    },
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "rust-lang.rust",
+        "mhutchie.git-graph",
+        "eamodio.gitlens"
+    ],
+    "forwardPorts": [],
+    "postCreateCommand": "cargo check",
+    "remoteUser": "root"
+}
